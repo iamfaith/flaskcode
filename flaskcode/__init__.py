@@ -2,8 +2,10 @@
 """flaskcode Flask Blueprint"""
 import os
 from flask import Blueprint, current_app, g, abort
-from . import __pkginfo__, default_config
-
+try:
+    from . import __pkginfo__, default_config
+except:
+    import __pkginfo__, default_config
 
 __title__ = __pkginfo__.title
 __version__ = __pkginfo__.version
@@ -42,5 +44,7 @@ def process_template_context():
         editor_theme=current_app.config.get('FLASKCODE_EDITOR_THEME', default_config.FLASKCODE_EDITOR_THEME),
     )
 
-
-from . import views
+try:
+    from . import views
+except:
+    import views

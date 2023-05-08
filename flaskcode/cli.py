@@ -3,8 +3,10 @@
 import os
 import click
 from flask import Flask, request, make_response
-from . import blueprint, default_config, __pkginfo__
-
+try:
+    from . import blueprint, default_config, __pkginfo__
+except:
+    from __init__ import blueprint, default_config, __pkginfo__
 
 help_str = """Run {app_title} with given RESOURCE_BASEPATH or current working directory.
 

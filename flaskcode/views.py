@@ -2,9 +2,12 @@
 import os
 import mimetypes
 from flask import render_template, abort, jsonify, send_file, g, request
-from .utils import write_file, dir_tree, get_file_extension
-from . import blueprint
-
+try:
+    from .utils import write_file, dir_tree, get_file_extension
+    from . import blueprint
+except:
+    from utils import write_file, dir_tree, get_file_extension
+    from __init__ import blueprint
 
 @blueprint.route('/')
 def index():
@@ -18,7 +21,7 @@ def resource_data(file_path):
     file_path = os.path.join(g.flaskcode_resource_basepath, file_path)
     if not (os.path.exists(file_path) and os.path.isfile(file_path)):
         abort(404)
-    response = send_file(file_path, mimetype='text/plain', cache_timeout=0)
+    response = send_file(file_path, mimetype='text/plain')
     mimetype, encoding = mimetypes.guess_type(file_path, False)
     if mimetype:
         response.headers.set('X-File-Mimetype', mimetype)
@@ -37,11 +40,15 @@ def update_resource_data(file_path):
     if not is_new_resource and not (os.path.exists(file_path) and os.path.isfile(file_path)):
         abort(404)
     success = True
-    message = 'File saved successfully'
-    resource_data = request.form.get('resource_data', None)
-    if resource_data:
-        success, message = write_file(resource_data, file_path)
-    else:
-        success = False
-        message = 'File data not uploaded'
+    message = "File can not be changed!"
+    
+    ############################################################## origin ########################
+    # message = 'File saved successfully'
+    # resource_data = request.form.get('resource_data', None)
+    # if resource_data:
+    #     success, message = write_file(resource_data, file_path)
+    # else:
+    #     success = False
+    #     message = 'File data not uploaded'
+    ############################################################## origin ########################
     return jsonify({'success': success, 'message': message})
