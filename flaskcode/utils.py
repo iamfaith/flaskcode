@@ -17,6 +17,13 @@ else:
     string_types = str
 
 
+def get_file_count(dir_path): 
+    count = 0
+    if os.path.exists(dir_path):
+        for _, _, files in os.walk(dir_path):
+            count += len(files)
+    return count
+
 def get_file_extension(filename):
     # return filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
     ext = os.path.splitext(filename)[1]

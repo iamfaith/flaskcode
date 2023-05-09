@@ -57,7 +57,15 @@
                     <i id="resource-mod" class="text-danger fa fa-asterisk" aria-hidden="true" style="display:none;"></i>
                 </span>
                 <span class="pull-right hidden-xs" id="header-action-group">
-                    <a href="javascript:void(0);" class="header-actions" data-action-id="save" title="Save"><span class="badge badge-primary"><i class="fa fa-save" aria-hidden="true"></i> Save</span></a>
+                    <a href="javascript:void(0);" class="header-actions" data-action-id="clean" title="Clean"><span class="badge badge-primary"><i class="fa fa-eraser" aria-hidden="true"></i> Clean</span></a>
+                     <!-- fa-eraser broom -->
+                    &nbsp;|&nbsp;
+                    <a href="javascript:void(0);" class="header-actions" data-action-id="run" title="Run"><span class="badge badge-primary"><i class="fa fa-play" aria-hidden="true"></i> Run</span></a>
+                    <!-- fa-play,fa-running -->
+                    &nbsp;|&nbsp;
+                    <a href="javascript:void(0);" class="header-actions" data-action-id="compile" title="Compile"><span class="badge badge-primary"><i class="fa fa-cog" aria-hidden="true"></i> Compile</span></a>
+                    <!-- fa-cog,fa-gear -->
+                    <!-- <a href="javascript:void(0);" class="header-actions" data-action-id="save" title="Save"><span class="badge badge-primary"><i class="fa fa-save" aria-hidden="true"></i> Save</span></a> -->
                     &nbsp;|&nbsp;
                     <a href="javascript:void(0);" class="header-actions" data-action-id="reload" title="Reload"><span class="badge badge-primary"><i class="fa fa-refresh" aria-hidden="true"></i> Reload</span></a>
                     &nbsp;|&nbsp;
@@ -100,6 +108,7 @@
 <script type="text/javascript">
 flaskcode.config.set('pluginsBaseUrl', "{{ url_for('flaskcode.static', filename='vendor') }}");
 flaskcode.config.set('updateResourceBaseUrl', "{{ url_for('flaskcode.update_resource_data', file_path='') }}");
+flaskcode.config.set('runCodeUrl', "{{ url_for('flaskcode.run_code', file_path='') }}");
 flaskcode.config.set('resourceUrlTemplate', "{{ url_for('flaskcode.resource_data', file_path='__pathname__') }}");
 flaskcode.config.set('editorTheme', "{{ editor_theme }}");
 </script>

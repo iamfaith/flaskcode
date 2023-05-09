@@ -319,6 +319,104 @@ flaskcode.onEditorStateChange = function (state) {
     }
 };
 
+
+flaskcode.onRun = function (editor) {
+    var filePath = flaskcode.$editorContainer.data('filePath');
+
+    if (!window.FormData) {
+        flaskcode.notifyEditor('This browser does not support editor save', 'error');
+    } else if (!filePath) {
+        flaskcode.notifyEditor('Editor is not initialized properly. Reload page and try again.', 'error');
+    } else {
+        var data = new FormData();
+        $.ajax({
+            type: 'POST',
+            url: flaskcode.config.get('runCodeUrl') + filePath,
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            beforeSend: function (xhr, settings) {
+                flaskcode.setEditorState(flaskcode.editorStates.BUSY);
+                flaskcode.$editorLoader.addClass('transparent').show();
+            },
+            success: function (data, status, xhr) {
+                if (status == 'success' && data.success) {
+                    flaskcode.setEditorState(flaskcode.editorStates.LOADED);
+                    flaskcode.notifyEditor(data.message || 'Saved!');
+                } else {
+                    flaskcode.notifyEditor(data.message || 'Error!', 'error');
+                }
+            },
+            error: function (xhr, status, err) {
+                flaskcode.setEditorState(prevState);
+                flaskcode.notifyEditor('Error: ' + err, 'error');
+            },
+            complete: function (xhr, status) {
+                flaskcode.$editorLoader.hide().removeClass('transparent');
+            },
+        });
+    }
+};
+
+
+function compileOrClean(isCompile, filePath) {
+    
+    if (!window.FormData) {
+        flaskcode.notifyEditor('This browser does not support editor save', 'error');
+    } else if (!filePath) {
+        flaskcode.notifyEditor('Editor is not initialized properly. Reload page and try again.', 'error');
+    } else {
+        var data = new FormData();
+        data.set('isCompile', isCompile);
+
+        $.ajax({
+            type: 'POST',
+            url: flaskcode.config.get('updateResourceBaseUrl') + filePath,
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            beforeSend: function (xhr, settings) {
+                flaskcode.setEditorState(flaskcode.editorStates.BUSY);
+                flaskcode.$editorLoader.addClass('transparent').show();
+            },
+            success: function (data, status, xhr) {
+                if (status == 'success' && data.success) {
+                    flaskcode.setEditorState(flaskcode.editorStates.LOADED);
+                    flaskcode.notifyEditor(data.message || 'Saved!');
+                } else {
+                    // flaskcode.setEditorState(prevState);
+                    flaskcode.notifyEditor(data.message || 'Error!', 'error');
+                }
+            },
+            error: function (xhr, status, err) {
+                flaskcode.setEditorState(prevState);
+                flaskcode.notifyEditor('Error: ' + err, 'error');
+            },
+            complete: function (xhr, status) {
+                flaskcode.$editorLoader.hide().removeClass('transparent');
+            },
+        });
+    }
+}
+
+
+
+flaskcode.onCompile = function (editor) {
+    let isCompile = 1
+    var filePath = flaskcode.$editorContainer.data('filePath');
+
+    compileOrClean(isCompile, filePath);
+};
+
+flaskcode.onClean =  function (editor) {
+    let isCompile = 0
+    var filePath = flaskcode.$editorContainer.data('filePath');
+    compileOrClean(isCompile, filePath);
+};
+
+
 flaskcode.onEditorSave = function (editor) {
     if (flaskcode.editorWidget.editorState != flaskcode.editorStates.MODIFIED/* && !editor.hasWidgetFocus()*/) {
         return null;
@@ -384,6 +482,43 @@ flaskcode.setEditorEvents = function (editor) {
         contextMenuGroupId: '1_modification',
         contextMenuOrder: 1.5,
         run: flaskcode.onEditorSave,
+    });
+
+    // compile action
+    editor.addAction({
+        id: 'run',
+        label: 'Run',
+        keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+        precondition: null,
+        keybindingContext: null,
+        // contextMenuGroupId: '1_modification',
+        contextMenuOrder: 1.5,
+        run: flaskcode.onRun,
+    });
+
+    // clean action
+    editor.addAction({
+        id: 'clean',
+        label: 'Clean',
+        keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+        precondition: null,
+        keybindingContext: null,
+        // contextMenuGroupId: '1_modification',
+        contextMenuOrder: 1.5,
+        run: flaskcode.onClean,
+    });
+
+
+    // compile action
+    editor.addAction({
+        id: 'compile',
+        label: 'Compile',
+        keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+        precondition: null,
+        keybindingContext: null,
+        // contextMenuGroupId: '1_modification',
+        contextMenuOrder: 1.5,
+        run: flaskcode.onCompile,
     });
 
     // reload action
