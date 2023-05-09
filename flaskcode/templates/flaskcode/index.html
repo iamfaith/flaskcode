@@ -57,6 +57,9 @@
                     <i id="resource-mod" class="text-danger fa fa-asterisk" aria-hidden="true" style="display:none;"></i>
                 </span>
                 <span class="pull-right hidden-xs" id="header-action-group">
+                    <input type="text" id="sid" name="sid" required
+       minlength="3" maxlength="20" size="10">
+                    &nbsp;|&nbsp;
                     <a href="javascript:void(0);" class="header-actions" data-action-id="clean" title="Clean"><span class="badge badge-primary"><i class="fa fa-eraser" aria-hidden="true"></i> Clean</span></a>
                      <!-- fa-eraser broom -->
                     &nbsp;|&nbsp;
@@ -113,4 +116,5 @@ flaskcode.config.set('resourceUrlTemplate', "{{ url_for('flaskcode.resource_data
 flaskcode.config.set('editorTheme', "{{ editor_theme }}");
 </script>
 <script type="text/javascript" src="{{ url_for('flaskcode.static', filename='js/flaskcode.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('flaskcode.static', filename='js/auto_complete.js') }}"></script>
 {% endblock %}

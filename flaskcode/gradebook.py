@@ -62,7 +62,11 @@ class GradeBook:
             firstname = str(
                 self.studentDF.loc[self.studentDF['studentnum'] == studentnum][info].to_numpy()[0])
             ret.append(firstname)
-            
+
+            familyname = str(
+                self.studentDF.loc[self.studentDF['studentnum'] == studentnum]['familyname'].to_numpy()[0])
+            ret.append(familyname)  
+                     
             name = str(
                 self.studentDF.loc[self.studentDF['studentnum'] == studentnum]['name'].to_numpy()[0])
             

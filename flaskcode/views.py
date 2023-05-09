@@ -26,10 +26,10 @@ def main(current_dir, user_id):
     # count = get_file_count(g.flaskcode_resource_basepath)
     dtree = {}
     if len(name) > 0:
-        if len(name) == 2:
-            shell_cmd = f"cd '{g.flaskcode_resource_basepath}' && ls |grep -i {name[0]}|grep -i {name[1]}"
+        if len(name) == 3:
+            shell_cmd = f"cd '{g.flaskcode_resource_basepath}' && ls |grep -i '{name[0]} {name[1]}'|grep '{name[2]}'"
         else:
-            shell_cmd = f"cd '{g.flaskcode_resource_basepath}' && ls |grep -i {name[0]}"
+            shell_cmd = f"cd '{g.flaskcode_resource_basepath}' && ls |grep -i '{name[0]} {name[1]}'"
         try:
             code_dir = subprocess.check_output(
                 shell_cmd, shell=True, stderr=subprocess.STDOUT).decode().replace(
